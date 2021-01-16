@@ -1,18 +1,19 @@
 {
-  "name": "python-aria-mirror-bot",
+  "name": "bot4mirror",
   "description": "This is a Telegram bot for mirroring files on the internet to Google Drive.",
   "logo": "https://telegra.ph/file/3927687333b6d5b407725.jpg",
   "keywords": [
     "telegram",
+    "bot4mirror",
     "mirror",
     "python",
     "aria",
     "mirror",
     "googledrive"
   ],
-  "repository": "https://github.com/lzzy12/python-aria-mirror-bot",
-  "success_url": "https://github.com/lzzy12/python-aria-mirror-bot",
-  "website": "https://github.com/lzzy12/python-aria-mirror-bot",
+  "repository": "https://github.com/zoeyzsz/bot4mirror",
+  "success_url": "https://github.com/zoeyzsz/bot4mirror",
+  "website": "https://github.com/zoeyzsz/bot4mirror",
   "env": {
     "ENV": {
       "description": "Setting to ANYTHING will enable webhooks when in ENV mode. Don't Change !",
