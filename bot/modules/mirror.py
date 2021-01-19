@@ -1,10 +1,10 @@
 import requests
 from telegram.ext import CommandHandler, run_async
 
-from bot import Interval, INDEX_URL
+from bot import Interval, INDEX_URL, BLOCK_MEGA_LINKS, BLOCK_MEGA_FOLDER
 from bot import dispatcher, DOWNLOAD_DIR, DOWNLOAD_STATUS_UPDATE_INTERVAL, download_dict, download_dict_lock
 from bot.helper.ext_utils import fs_utils, bot_utils
-from bot.helper.ext_utils.bot_utils import setInterval
+from bot.helper.ext_utils.bot_utils import setInterval, get_mega_link_type, get_readable_file_size
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException, NotSupportedExtractionArchive
 from bot.helper.mirror_utils.download_utils.aria2_download import AriaDownloadHelper
 from bot.helper.mirror_utils.download_utils.mega_downloader import MegaDownloadHelper
@@ -219,6 +219,12 @@ def _mirror(bot, update, isTar=False, extract=False):
         LOGGER.info(f'{link}: {e}')
     listener = MirrorListener(bot, update, isTar, tag, extract)
     if bot_utils.is_mega_link(link):
+        link_type = get_mega_link_type(link)
+        if link_type == "folder" and BLOCK_MEGA_FOLDER:
+            sendMessage("Mega.nz Folder is Blocked!", bot, update)
+        elif BLOCK_MEGA_LINKS:
+            sendMessage("Mega.nz Links is Blocked - (Because Unstable & Buggy)", bot, update)
+         else:
         mega_dl = MegaDownloadHelper()
         mega_dl.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener)
     else:
