@@ -212,7 +212,7 @@ def _mirror(bot, update, isTar=False, extract=False):
     if not bot_utils.is_url(link) and not bot_utils.is_magnet(link):
         sendMessage('No download source provided', bot, update)
         return
-
+        
     try:
         link = direct_link_generator(link)
     except DirectDownloadLinkException as e:
@@ -224,16 +224,16 @@ def _mirror(bot, update, isTar=False, extract=False):
             sendMessage("Mega.nz Folder is Blocked!", bot, update)
         elif BLOCK_MEGA_LINKS:
             sendMessage("Mega.nz Links is Blocked - (Because Unstable & Buggy)", bot, update)
-         else:
-        mega_dl = MegaDownloadHelper()
-        mega_dl.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener)
+        else:
+            mega_dl = MegaDownloadHelper()
+            mega_dl.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener)
+            sendStatusMessage(update, bot)
     else:
         ariaDlManager.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener)
-    sendStatusMessage(update, bot)
+        sendStatusMessage(update, bot)
     if len(Interval) == 0:
         Interval.append(setInterval(DOWNLOAD_STATUS_UPDATE_INTERVAL, update_all_messages))
-
-
+        
 @run_async
 def mirror(update, context):
     _mirror(context.bot, update)
