@@ -20,6 +20,7 @@ from bot import parent_id, DOWNLOAD_DIR, IS_TEAM_DRIVE, INDEX_URL, \
     USE_SERVICE_ACCOUNTS, download_dict
 from bot.helper.ext_utils.bot_utils import *
 from bot.helper.ext_utils.fs_utils import get_mime_type
+from bot.modules import delete
 
 LOGGER = logging.getLogger(__name__)
 logging.getLogger('googleapiclient.discovery').setLevel(logging.ERROR)
@@ -180,7 +181,7 @@ class GoogleDriveHelper:
         download_url = self.__G_DRIVE_BASE_DOWNLOAD_URL.format(drive_file.get('id'))
         return download_url
 
-        def deletefile(self, link: str):
+    def deletefile(self, link: str):
         try:
             file_id = self.getIdFromUrl(link)
         except (KeyError,IndexError):
@@ -189,7 +190,7 @@ class GoogleDriveHelper:
         msg = ''
         try:
             res = self.__service.files().delete(fileId=file_id, supportsTeamDrives=IS_TEAM_DRIVE).execute()
-            msg = "Successfully deleted"
+            msg = "Successfully Deleted! ✅"
         except HttpError as err:
             LOGGER.error(str(err))
             if "File not found" in str(err):
