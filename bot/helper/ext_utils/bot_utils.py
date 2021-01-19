@@ -98,12 +98,12 @@ def get_readable_message():
             if download.status() != MirrorStatus.STATUS_ARCHIVING and download.status() != MirrorStatus.STATUS_EXTRACTING:
                 msg += f"\n<code>{get_progress_bar_string(download)} {download.progress()}</code>" \
                        f"\n<b>🔻 Downloaded : {get_readable_file_size(download.processed_bytes())} of {download.size()}</b>" \
-                       f"\n<b>⚡️ Speed : {download.speed()}</b>\n<b>⏳ ETA :- {download.eta()}</b>"
+                       f"\n<b>⚡️ Speed : {download.speed()}</b>\n<b>⏳ ETA : {download.eta()} ⌛️</b>"
             if download.status() == MirrorStatus.STATUS_DOWNLOADING:
                 if hasattr(download, 'is_torrent'):
                     msg += f"\n<b>🔍 Tracker : 🧲 Seeders : {download.aria_download().num_seeders}</b>" \
                         f" | <b>🧲 Peers : {download.aria_download().connections}</b>"
-                msg += f"\n<b>GID</b> : <code>{download.gid()}</code>" \
+                msg += f"\n<b>🔰 GID</b> : <code>{download.gid()}</code>" \
                        f"\n<b>🚫 Cancel (?) :</b> <code>/{BotCommands.CancelMirror} {download.gid()}</code>"
             msg += "\n\n"
         return msg
