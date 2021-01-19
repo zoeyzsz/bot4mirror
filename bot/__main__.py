@@ -32,11 +32,12 @@ def stats(update, context):
             f'<b>💨 Total Disk Space : {total}</b>\n' \
             f'<b>📈 Used : {used}</b> ' \
             f'<b>📉 Free : {free}</b>\n\n' \
-            f'<b>📊 Data Usage 📊</b>\n<b>🔺 Upload: {sent}</b>\n' \
+            f'<b>📊 Data Usage 📊</b>\n<b>🔺 Upload : {sent}</b>\n' \
             f'<b>🔻 Download : {recv}</b>\n\n' \
-            f'<b> 🖥️ CPU : {cpuUsage}%</b>\n ' \
-            f'<b>🎛️ RAM : {memory}%</b>\n ' \
-            f'<b>🗃️ Disk : {disk}</b>%'
+            f'<b>🔥 <b>Performance Usage 🔥</b>\n\n' \
+            f'<b> 🖥️ CPU  : {cpuUsage}% 💥</b>\n ' \
+            f'<b>🎛️ RAM : {memory}% 💥</b>\n ' \
+            f'<b>🗃️ Disk  : {disk} 💥</b>%'
     sendMessage(stats, context.bot, update)
 
 
