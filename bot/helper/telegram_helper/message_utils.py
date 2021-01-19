@@ -64,8 +64,8 @@ def delete_all_messages():
 
 def update_all_messages():
     msg = get_readable_message()
-    msg += f"<b>📉 Performance Usage 📈</b>\n\n" \
-           f"<b>🖥️ CPU : {psutil.cpu_percent()}%</b>\n" \
+    msg += f"<b>🔥 Performance Usage 🔥</b>\n\n" \
+           f"<b>🖥️ CPU  : {psutil.cpu_percent()}%</b>\n" \
            f"<b>🗃️ DISK : {psutil.disk_usage('/').percent}%</b>\n" \
            f"<b>🎛️ RAM : {psutil.virtual_memory().percent}%</b>"
     with download_dict_lock:
@@ -82,8 +82,8 @@ def update_all_messages():
 
 def sendStatusMessage(msg, bot):
     progress = get_readable_message()
-    progress += f"<b>📉 Performance Usage 📈</b>\n\n" \
-           f"<b>🖥️ CPU : {psutil.cpu_percent()}%</b>\n" \
+    progress += f"<b>🔥 Performance Usage 🔥</b>\n\n" \
+           f"<b>🖥️ CPU  : {psutil.cpu_percent()}%</b>\n" \
            f"<b>🗃️ DISK : {psutil.disk_usage('/').percent}%</b>\n" \
            f"<b>🎛️ RAM : {psutil.virtual_memory().percent}%</b>"
     with download_dict_lock:
