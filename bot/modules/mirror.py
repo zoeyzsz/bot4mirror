@@ -142,7 +142,7 @@ class MirrorListener(listeners.MirrorListeners):
                 share_url = requests.utils.requote_uri(f'{INDEX_URL}/{download_dict[self.uid].name()}')
                 if os.path.isdir(f'{DOWNLOAD_DIR}/{self.uid}/{download_dict[self.uid].name()}'):
                     share_url += '/'
-                msg += f'\n\n🔗 <b>Shareable Link :</b> <b><a href="{share_url}">Google Drive Index</a></b>'
+                msg += f'\n\n🔗 <b>Shareable Link :</b> 💥 <b><a href="{share_url}">Drive Index</a></b> 💥'
             if self.message.from_user.username:
                 uname = f"@{self.message.from_user.username}"
             else:
