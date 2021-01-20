@@ -9,7 +9,7 @@ RUN apt-get -qq update && \
     apt-add-repository non-free && \
     apt-get -qq update && \
     apt-get -qq upgrade && \
-    apt-get -qq install -y p7zip-full p7zip-rar tzdata aria2 curl nano pv jq ffmpeg locales python3 python3-pip python3-lxml libxml2-dev libxslt-dev python-dev gnupg gnupg1 gnupg2 apt-transport-https ca-certificates libcurl3-gnutls liberror-perl libxmuu1  \
+    apt-get -qq install -y p7zip-full p7zip-rar tzdata aria2 curl nano pv jq ffmpeg locales python3 python3-pip python3-lxml libxml2-dev libxslt-dev python-dev gnupg gnupg1 gnupg2 apt-transport-https ca-certificates libcurl3-gnutls liberror-perl libxmuu1 && \
     apt-get purge -y software-properties-common
 
 COPY requirements.txt .
