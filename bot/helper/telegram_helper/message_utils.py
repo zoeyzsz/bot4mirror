@@ -69,10 +69,28 @@ def update_all_messages():
            f"<b>🗃️ DISK : {psutil.disk_usage('/').percent}% 💥</b>\n" \
            f"<b>🎛️ RAM : {psutil.virtual_memory().percent}% 💥</b>"
     with download_dict_lock:
+        dlspeed_bytes = 0
+        uldl_bytes = 0
+        for download in list(download_dict.values()):
+            speedy = download.speed()
+            if download.status() == MirrorStatus.STATUS_DOWNLOADING:
+                if 'KiB/s' in speedy:
+                    dlspeed_bytes += float(speedy.split('K')[0]) * 1024
+                elif 'MiB/s' in speedy:
+                    dlspeed_bytes += float(speedy.split('M')[0]) * 1048576 
+            if download.status() == MirrorStatus.STATUS_UPLOADING:
+                if 'KB/s' in speedy:
+            	    uldl_bytes += float(speedy.split('K')[0]) * 1024
+                elif 'MB/s' in speedy:
+                    uldl_bytes += float(speedy.split('M')[0]) * 1048576
+        dlspeed = get_readable_file_size(dlspeed_bytes)
+        ulspeed = get_readable_file_size(uldl_bytes)
+        msg += f"\n<b>Download :{dlspeed}ps </b>🔻| <b>Upload :>{ulspeed}ps </b> 🔺\n"
+    with status_reply_dict_lock:
         for chat_id in list(status_reply_dict.keys()):
             if status_reply_dict[chat_id] and msg != status_reply_dict[chat_id].text:
                 if len(msg) == 0:
-                    msg = "Starting Download 📥"
+                    msg = "Starting DL"
                 try:
                     editMessage(msg, status_reply_dict[chat_id])
                 except Exception as e:
@@ -87,6 +105,24 @@ def sendStatusMessage(msg, bot):
            f"<b>🗃️ DISK : {psutil.disk_usage('/').percent}% 💥</b>\n" \
            f"<b>🎛️ RAM : {psutil.virtual_memory().percent}% 💥</b>"
     with download_dict_lock:
+        dlspeed_bytes = 0
+        uldl_bytes = 0
+        for download in list(download_dict.values()):
+            speedy = download.speed()
+            if download.status() == MirrorStatus.STATUS_DOWNLOADING:
+                if 'KiB/s' in speedy:
+                    dlspeed_bytes += float(speedy.split('K')[0]) * 1024
+                elif 'MiB/s' in speedy:
+                    dlspeed_bytes += float(speedy.split('M')[0]) * 1048576 
+            if download.status() == MirrorStatus.STATUS_UPLOADING:
+                if 'KB/s' in speedy:
+            	    uldl_bytes += float(speedy.split('K')[0]) * 1024
+                elif 'MB/s' in speedy:
+                    uldl_bytes += float(speedy.split('M')[0]) * 1048576
+        dlspeed = get_readable_file_size(dlspeed_bytes)
+        ulspeed = get_readable_file_size(uldl_bytes)
+        progress += f"\n<b>Download : {dlspeed}ps </b>🔻| <b>Upload : {ulspeed}ps </b> 🔺\n"
+    with status_reply_dict_lock:
         if msg.message.chat.id in list(status_reply_dict.keys()):
             try:
                 message = status_reply_dict[msg.message.chat.id]
@@ -97,6 +133,6 @@ def sendStatusMessage(msg, bot):
                 del status_reply_dict[msg.message.chat.id]
                 pass
         if len(progress) == 0:
-            progress = "Starting Download 📥"
+            progress = "Starting DL"
         message = sendMessage(progress, bot, msg)
         status_reply_dict[msg.message.chat.id] = message
