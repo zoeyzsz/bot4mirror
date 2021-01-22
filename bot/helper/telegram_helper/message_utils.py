@@ -74,7 +74,7 @@ def delete_all_messages():
 def update_all_messages():
     msg = get_readable_message()
     msg += f"<b>🔥 Benchmark Stats 🔥</b>\n\n" \
-           f"<b>🖥️ CPU : {psutil.cpu_percent()}%</b>\n" \
+           f"<b>🖥️ CPU  : {psutil.cpu_percent()}%</b>\n" \
            f"<b>🗃️ DISK : {psutil.disk_usage('/').percent}%</b>\n" \
            f"<b>🎛️ RAM : {psutil.virtual_memory().percent}%</b>"
     with download_dict_lock:
@@ -94,7 +94,8 @@ def update_all_messages():
                     uldl_bytes += float(speedy.split('M')[0]) * 1048576
         dlspeed = get_readable_file_size(dlspeed_bytes)
         ulspeed = get_readable_file_size(uldl_bytes)
-        msg += f"\n<b>D : {dlspeed}/s 🔻 </b> | <b>U : {ulspeed}/s 🔺</b>\n"
+        msg += f"<b>\n\n⚡️ Speed Meter ⚡️</b>\n" \
+                    f"<b>D : {dlspeed}/s 🔻 </b> | <b>U : {ulspeed}/s 🔺</b>"   
     with status_reply_dict_lock:
         for chat_id in list(status_reply_dict.keys()):
             if status_reply_dict[chat_id] and msg != status_reply_dict[chat_id].text:
@@ -110,7 +111,7 @@ def update_all_messages():
 def sendStatusMessage(msg, bot):
     progress = get_readable_message()
     progress += f"<b>🔥 Benchmark Stats 🔥</b>\n\n" \
-           f"<b>🖥️ CPU : {psutil.cpu_percent()}%</b>\n" \
+           f"<b>🖥️ CPU  : {psutil.cpu_percent()}%</b>\n" \
            f"<b>🗃️ DISK : {psutil.disk_usage('/').percent}%</b>\n" \
            f"<b>🎛️ RAM : {psutil.virtual_memory().percent}%</b>"
     with download_dict_lock:
@@ -130,7 +131,8 @@ def sendStatusMessage(msg, bot):
                     uldl_bytes += float(speedy.split('M')[0]) * 1048576
         dlspeed = get_readable_file_size(dlspeed_bytes)
         ulspeed = get_readable_file_size(uldl_bytes)
-        progress += f"\n<b>D : {dlspeed}/s 🔻 </b> | <b>U : {ulspeed}/s 🔺</b>\n"
+        progress += f"<b>\n\n⚡️ Speed Meter ⚡️</b>\n" \
+                    f"<b>D : {dlspeed}/s 🔻 </b> | <b>U : {ulspeed}/s 🔺</b>"
     with status_reply_dict_lock:
         if msg.message.chat.id in list(status_reply_dict.keys()):
             try:
