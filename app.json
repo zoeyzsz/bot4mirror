@@ -31,6 +31,10 @@
       "description": "Should be an integer. ID of owner of bot",
       "required": true
     },
+    "OWNER_IDS": {
+      "description": " (Sudo) Multiple Telegram user ID (not username) separate by space.",
+      "required": true
+    },
     "DOWNLOAD_DIR": {
       "description": "Directory where the bot downloaded files and then delete after file upload to Google Drive",
       "value": "/home/mirror-bot/downloads",
