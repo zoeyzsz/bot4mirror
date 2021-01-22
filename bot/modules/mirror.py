@@ -138,7 +138,7 @@ class MirrorListener(listeners.MirrorListeners):
 
     def onUploadComplete(self, link: str):
         with download_dict_lock:
-            msg = f'<b>📂 File Name : <code>{download_dict[self.uid].name()}<code>\n<b>📥 Total Size : {download_dict[self.uid].size()}</b>'
+            msg = f'<b>📂 File Name : <code>{download_dict[self.uid].name()}</code>\n<b>📥 Total Size : {download_dict[self.uid].size()}</b>'
             buttons = button_build.ButtonMaker()
             if SHORTENER is not None and SHORTENER_API is not None:
                 surl = requests.get('https://{}/api?api={}&url={}&format=text'.format(SHORTENER, SHORTENER_API, link)).text
