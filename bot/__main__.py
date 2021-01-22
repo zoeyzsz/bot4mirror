@@ -33,7 +33,7 @@ def stats(update, context):
             f'<b>📈 Used : {used}</b> ' \
             f'<b>📉 Free : {free}</b>\n\n' \
             f'<b>📊 Data Usage 📊</b>\n<b>🔺 Upload : {sent}</b>\n' \
-            f'<b>🔻 Download : {recv}</b>\n\n🔥 Benchmark Stats 🔥\n\n' \
+            f'<b>🔻 Download : {recv}</b>\n\n🔥 <b>Benchmark Stats</b> 🔥\n\n' \
             f'<b> 🖥️ CPU  : {cpuUsage}%</b>\n ' \
             f'<b>🎛️ RAM : {memory}%</b>\n ' \
             f'<b>🗃️ Disk  : {disk}%</b>'
