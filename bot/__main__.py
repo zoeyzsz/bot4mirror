@@ -95,10 +95,6 @@ def bot_help(update, context):
 
 /{BotCommands.StatsCommand}: Show Stats of the machine the bot is hosted on
 
-/{BotCommands.AuthorizeCommand}: Authorize a chat or a user to use the bot (Can only be invoked by owner of the bot)
-
-/{BotCommands.LogCommand}: Get a log file of the bot. Handy for getting crash reports
-
 '''
     sendMessage(help_string, context.bot, update)
 
