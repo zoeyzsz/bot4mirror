@@ -323,7 +323,7 @@ class GoogleDriveHelper:
                     surl = requests.get('https://{}/api?api={}&url={}&format=text'.format(SHORTENER, SHORTENER_API, durl)).text
                     buttons.buildbutton("⚡Google Drive⚡", surl)
                 else:
-                    buttons.buildbutton("⚡⚡Google Drive⚡⚡", durl)
+                    buttons.buildbutton("⚡Google Drive⚡", durl)
                 if INDEX_URL is not None:
                     url = requests.utils.requote_uri(f'{INDEX_URL}/{meta.get("name")}/')
                     if SHORTENER is not None and SHORTENER_API is not None:
