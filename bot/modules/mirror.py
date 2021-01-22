@@ -123,7 +123,7 @@ class MirrorListener(listeners.MirrorListeners):
             uname = f"@{self.message.from_user.username}"
         else:
             uname = f'<a href="tg://user?id={self.message.from_user.id}">{self.message.from_user.first_name}</a>'
-        msg = f"Hi {uname}\n\n 😡 Your download has been stopped 😡: {error}"
+        msg = f"Hi {uname}\n\n 😡 Your download has been stopped 😡\n {error}"
         sendMessage(msg, self.bot, self.update)
         if count == 0:
             self.clean()
@@ -138,7 +138,7 @@ class MirrorListener(listeners.MirrorListeners):
 
     def onUploadComplete(self, link: str):
         with download_dict_lock:
-            msg = f'<b>📂 File Name : {download_dict[self.uid].name()}</b>\n<b>📥 Total Size : {download_dict[self.uid].size()}</b>'
+            msg = f'<b>📂 File Name : <code>{download_dict[self.uid].name()}<code>\n<b>📥 Total Size : {download_dict[self.uid].size()}</b>'
             buttons = button_build.ButtonMaker()
             if SHORTENER is not None and SHORTENER_API is not None:
                 surl = requests.get('https://{}/api?api={}&url={}&format=text'.format(SHORTENER, SHORTENER_API, link)).text
