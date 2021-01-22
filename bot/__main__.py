@@ -11,9 +11,9 @@ from bot import dispatcher, updater, botStartTime
 from bot.helper.ext_utils import fs_utils
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.message_utils import *
-from .helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
-from .helper.telegram_helper.filters import CustomFilters
-from .modules import authorize, list, cancel_mirror, mirror_status, mirror, clone, watch
+from bot.helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
+from bot.helper.telegram_helper.filters import CustomFilters
+from bot.modules import authorize, list, cancel_mirror, mirror_status, mirror, clone, watch, delete
 
 
 @run_async
@@ -32,11 +32,11 @@ def stats(update, context):
             f'<b>💨 Total Disk Space : {total}</b>\n' \
             f'<b>📈 Used : {used}</b> ' \
             f'<b>📉 Free : {free}</b>\n\n' \
-            f'<b>📊 Data Usage 📊</b>\n<b>🔺 Upload: {sent}</b>\n' \
-            f'<b>🔻 Download : {recv}</b>\n\n' \
-            f'<b> 🖥️ CPU : {cpuUsage}%</b>\n ' \
+            f'<b>📊 Data Usage 📊</b>\n<b>🔺 Upload : {sent}</b>\n' \
+            f'<b>🔻 Download : {recv}</b>\n\n🔥 <b>Benchmark Stats</b> 🔥\n\n' \
+            f'<b> 🖥️ CPU  : {cpuUsage}%</b>\n ' \
             f'<b>🎛️ RAM : {memory}%</b>\n ' \
-            f'<b>🗃️ Disk : {disk}</b>%'
+            f'<b>🗃️ Disk  : {disk}%</b>'
     sendMessage(stats, context.bot, update)
 
 
@@ -94,10 +94,6 @@ def bot_help(update, context):
 /{BotCommands.ListCommand} [search term]: Searches the search term in the Google drive, if found replies with the link
 
 /{BotCommands.StatsCommand}: Show Stats of the machine the bot is hosted on
-
-/{BotCommands.AuthorizeCommand}: Authorize a chat or a user to use the bot (Can only be invoked by owner of the bot)
-
-/{BotCommands.LogCommand}: Get a log file of the bot. Handy for getting crash reports
 
 '''
     sendMessage(help_string, context.bot, update)

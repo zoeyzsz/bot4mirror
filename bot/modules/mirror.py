@@ -1,10 +1,11 @@
 import requests
 from telegram.ext import CommandHandler, run_async
+from telegram import InlineKeyboardMarkup
 
-from bot import Interval, INDEX_URL
-from bot import dispatcher, DOWNLOAD_DIR, DOWNLOAD_STATUS_UPDATE_INTERVAL, download_dict, download_dict_lock
+from bot import Interval, INDEX_URL, BUTTON_THREE_NAME, BUTTON_THREE_URL, BUTTON_FOUR_NAME, BUTTON_FOUR_URL, BUTTON_FIVE_NAME, BUTTON_FIVE_URL, BLOCK_MEGA_LINKS, BLOCK_MEGA_FOLDER
+from bot import dispatcher, DOWNLOAD_DIR, DOWNLOAD_STATUS_UPDATE_INTERVAL, download_dict, download_dict_lock, SHORTENER, SHORTENER_API
 from bot.helper.ext_utils import fs_utils, bot_utils
-from bot.helper.ext_utils.bot_utils import setInterval
+from bot.helper.ext_utils.bot_utils import setInterval, get_mega_link_type, get_readable_file_size
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException, NotSupportedExtractionArchive
 from bot.helper.mirror_utils.download_utils.aria2_download import AriaDownloadHelper
 from bot.helper.mirror_utils.download_utils.mega_downloader import MegaDownloadHelper
@@ -18,6 +19,7 @@ from bot.helper.mirror_utils.upload_utils import gdriveTools
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.message_utils import *
+from bot.helper.telegram_helper import button_build
 import pathlib
 import os
 import subprocess
@@ -110,7 +112,7 @@ class MirrorListener(listeners.MirrorListeners):
             try:
                 download = download_dict[self.uid]
                 del download_dict[self.uid]
-                LOGGER.info(f"Deleting folder: {download.path()}")
+                LOGGER.info(f"Deleting Folder: {download.path()}")
                 fs_utils.clean_download(download.path())
                 LOGGER.info(str(download_dict))
             except Exception as e:
@@ -121,7 +123,7 @@ class MirrorListener(listeners.MirrorListeners):
             uname = f"@{self.message.from_user.username}"
         else:
             uname = f'<a href="tg://user?id={self.message.from_user.id}">{self.message.from_user.first_name}</a>'
-        msg = f"{uname} your download has been stopped due to: {error}"
+        msg = f"Hi {uname}\n\n 😡 Your download has been stopped 😡\n {error}"
         sendMessage(msg, self.bot, self.update)
         if count == 0:
             self.clean()
@@ -136,26 +138,42 @@ class MirrorListener(listeners.MirrorListeners):
 
     def onUploadComplete(self, link: str):
         with download_dict_lock:
-            msg = f'<b>🗂 File Name : <a href="{link}">{download_dict[self.uid].name()}</a></b>\n\n<b>📥 Total Size : {download_dict[self.uid].size()}</b>'
+            msg = f'<b>📂 File Name : <code>{download_dict[self.uid].name()}</code>\n<b>📥 Total Size : {download_dict[self.uid].size()}</b>'
+            buttons = button_build.ButtonMaker()
+            if SHORTENER is not None and SHORTENER_API is not None:
+                surl = requests.get('https://{}/api?api={}&url={}&format=text'.format(SHORTENER, SHORTENER_API, link)).text
+                buttons.buildbutton("⚡Google Drive⚡", surl)
+            else:
+                buttons.buildbutton("⚡Google Drive⚡", link)
             LOGGER.info(f'Done Uploading {download_dict[self.uid].name()}')
             if INDEX_URL is not None:
                 share_url = requests.utils.requote_uri(f'{INDEX_URL}/{download_dict[self.uid].name()}')
                 if os.path.isdir(f'{DOWNLOAD_DIR}/{self.uid}/{download_dict[self.uid].name()}'):
                     share_url += '/'
-                msg += f'\n\n🔗 <b>Shareable Link :</b> <b><a href="{share_url}">Google Drive Index</a></b>'
+                if SHORTENER is not None and SHORTENER_API is not None:
+                    siurl = requests.get('https://{}/api?api={}&url={}&format=text'.format(SHORTENER, SHORTENER_API, share_url)).text
+                    buttons.buildbutton("💥Drive Index💥", siurl)
+                else:
+                    buttons.buildbutton("💥Drive Index💥", share_url)
+            if BUTTON_THREE_NAME is not None and BUTTON_THREE_URL is not None:
+                buttons.buildbutton(f"{BUTTON_THREE_NAME}", f"{BUTTON_THREE_URL}")
+            if BUTTON_FOUR_NAME is not None and BUTTON_FOUR_URL is not None:
+                buttons.buildbutton(f"{BUTTON_FOUR_NAME}", f"{BUTTON_FOUR_URL}")
+            if BUTTON_FIVE_NAME is not None and BUTTON_FIVE_URL is not None:
+                buttons.buildbutton(f"{BUTTON_FIVE_NAME}", f"{BUTTON_FIVE_URL}")
             if self.message.from_user.username:
                 uname = f"@{self.message.from_user.username}"
             else:
                 uname = f'<a href="tg://user?id={self.message.from_user.id}">{self.message.from_user.first_name}</a>'
             if uname is not None:
-                msg += f'\n\n<b>👤 Uploader :- {uname} ✨</b>'
+                msg += f'\n\n<b>Uploader :- {uname}</b> ✨'
             try:
                 fs_utils.clean_download(download_dict[self.uid].path())
             except FileNotFoundError:
                 pass
             del download_dict[self.uid]
             count = len(download_dict)
-        sendMessage(msg, self.bot, self.update)
+        sendMarkup(msg, self.bot, self.update, InlineKeyboardMarkup(buttons.build_menu(2)))
         if count == 0:
             self.clean()
         else:
@@ -178,6 +196,17 @@ class MirrorListener(listeners.MirrorListeners):
 
 
 def _mirror(bot, update, isTar=False, extract=False):
+    if update.message.from_user.last_name:
+        last_name = f" {update.message.from_user.last_name}"
+    else:
+        last_name = ""
+    if update.message.from_user.username:
+        username = f"- @{update.message.from_user.username}"
+    else:
+        username = "-"
+    name = f'<a href="tg://user?id={update.message.from_user.id}">{update.message.from_user.first_name}{last_name}</a>'
+    msg = f"User: {name} {username} (<code>{update.message.from_user.id}</code>)\n"
+
     message_args = update.message.text.split(' ')
     try:
         link = message_args[1]
@@ -201,6 +230,8 @@ def _mirror(bot, update, isTar=False, extract=False):
                     listener = MirrorListener(bot, update, isTar, tag)
                     tg_downloader = TelegramDownloadHelper(listener)
                     tg_downloader.add_download(reply_to, f'{DOWNLOAD_DIR}{listener.uid}/')
+                    msg += f"Message: <code>{file.mime_type}</code> | <code>{download_dict[listener.uid].name()}</code> | {download_dict[listener.uid].size()}"
+                    sendMessage(msg, bot, update)
                     sendStatusMessage(update, bot)
                     if len(Interval) == 0:
                         Interval.append(setInterval(DOWNLOAD_STATUS_UPDATE_INTERVAL, update_all_messages))
@@ -219,11 +250,25 @@ def _mirror(bot, update, isTar=False, extract=False):
         LOGGER.info(f'{link}: {e}')
     listener = MirrorListener(bot, update, isTar, tag, extract)
     if bot_utils.is_mega_link(link):
-        mega_dl = MegaDownloadHelper()
-        mega_dl.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener)
+        link_type = get_mega_link_type(link)
+        if link_type == "folder" and BLOCK_MEGA_FOLDER:
+            sendMessage("🚫 <b>Mega Folder Blocked!</b> 🚫", bot, update)
+        elif BLOCK_MEGA_LINKS:
+            sendMessage("🚫 <b>Mega Links Blocked!</b> 🚫\n\n<b>Because Unstable & Buggy</b>", bot, update)
+        else:
+            mega_dl = MegaDownloadHelper()
+            mega_dl.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener)
+            msg += f"Message: {update.message.text}"
+            sendMessage(msg, bot, update)
+            sendStatusMessage(update, bot)
     else:
         ariaDlManager.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener)
-    sendStatusMessage(update, bot)
+        if reply_to is not None:
+            msg += f"Message: <code>{file.mime_type}</code> | <code>{file.file_name}</code> | {get_readable_file_size(file.file_size)}"
+        else:
+            msg += f"Message: {update.message.text}"
+        sendMessage(msg, bot, update)
+        sendStatusMessage(update, bot)
     if len(Interval) == 0:
         Interval.append(setInterval(DOWNLOAD_STATUS_UPDATE_INTERVAL, update_all_messages))
 

@@ -69,11 +69,13 @@ if os.path.exists('authorized_chats.txt'):
 try:
     BOT_TOKEN = getConfig('BOT_TOKEN')
     parent_id = getConfig('GDRIVE_FOLDER_ID')
+    telegraph_token = getConfig('TELEGRAPH_TOKEN')
     DOWNLOAD_DIR = getConfig('DOWNLOAD_DIR')
     if DOWNLOAD_DIR[-1] != '/' or DOWNLOAD_DIR[-1] != '\\':
         DOWNLOAD_DIR = DOWNLOAD_DIR + '/'
     DOWNLOAD_STATUS_UPDATE_INTERVAL = int(getConfig('DOWNLOAD_STATUS_UPDATE_INTERVAL'))
     OWNER_ID = int(getConfig('OWNER_ID'))
+    OWNER_IDS = tuple(filter(lambda x: x, map(int, os.environ.get("OWNER_IDS", "").split())))
     AUTO_DELETE_MESSAGE_DURATION = int(getConfig('AUTO_DELETE_MESSAGE_DURATION'))
     USER_SESSION_STRING = getConfig('USER_SESSION_STRING')
     TELEGRAM_API = getConfig('TELEGRAM_API')
@@ -82,6 +84,11 @@ except KeyError as e:
     LOGGER.error("One or more env variables missing! Exiting now")
     exit(1)
 
+try:
+    UPTOBOX_TOKEN = getConfig('UPTOBOX_TOKEN')
+except KeyError:
+    logging.warning('UPTOBOX_TOKEN not provided!')
+    UPTOBOX_TOKEN = None
 try:
     MEGA_API_KEY = getConfig('MEGA_API_KEY')
 except KeyError:
@@ -103,6 +110,38 @@ try:
 except KeyError:
     INDEX_URL = None
 try:
+    BUTTON_THREE_NAME = getConfig('BUTTON_THREE_NAME')
+    BUTTON_THREE_URL = getConfig('BUTTON_THREE_URL')
+    if len(BUTTON_THREE_NAME) == 0 or len(BUTTON_THREE_URL) == 0:
+        raise KeyError
+except KeyError:
+    BUTTON_THREE_NAME = None
+    BUTTON_THREE_URL = None
+try:
+    BUTTON_FOUR_NAME = getConfig('BUTTON_FOUR_NAME')
+    BUTTON_FOUR_URL = getConfig('BUTTON_FOUR_URL')
+    if len(BUTTON_FOUR_NAME) == 0 or len(BUTTON_FOUR_URL) == 0:
+        raise KeyError
+except KeyError:
+    BUTTON_FOUR_NAME = None
+    BUTTON_FOUR_URL = None
+try:
+    BUTTON_FIVE_NAME = getConfig('BUTTON_FIVE_NAME')
+    BUTTON_FIVE_URL = getConfig('BUTTON_FIVE_URL')
+    if len(BUTTON_FIVE_NAME) == 0 or len(BUTTON_FIVE_URL) == 0:
+        raise KeyError
+except KeyError:
+    BUTTON_FIVE_NAME = None
+    BUTTON_FIVE_URL = None
+try:
+    STOP_DUPLICATE_MIRROR = getConfig('STOP_DUPLICATE_MIRROR')
+    if STOP_DUPLICATE_MIRROR.lower() == 'true':
+        STOP_DUPLICATE_MIRROR = True
+    else:
+        STOP_DUPLICATE_MIRROR = False
+except KeyError:
+    STOP_DUPLICATE_MIRROR = False
+try:
     IS_TEAM_DRIVE = getConfig('IS_TEAM_DRIVE')
     if IS_TEAM_DRIVE.lower() == 'true':
         IS_TEAM_DRIVE = True
@@ -119,6 +158,33 @@ try:
         USE_SERVICE_ACCOUNTS = False
 except KeyError:
     USE_SERVICE_ACCOUNTS = False
+
+try:
+    BLOCK_MEGA_FOLDER = getConfig('BLOCK_MEGA_FOLDER')
+    if BLOCK_MEGA_FOLDER.lower() == 'true':
+        BLOCK_MEGA_FOLDER = True
+    else:
+        BLOCK_MEGA_FOLDER = False
+except KeyError:
+    BLOCK_MEGA_FOLDER = False
+    
+try:
+    BLOCK_MEGA_LINKS = getConfig('BLOCK_MEGA_LINKS')
+    if BLOCK_MEGA_LINKS.lower() == 'true':
+        BLOCK_MEGA_LINKS = True
+    else:
+        BLOCK_MEGA_LINKS = False
+except KeyError:
+    BLOCK_MEGA_LINKS = False
+
+try:
+    SHORTENER = getConfig('SHORTENER')
+    SHORTENER_API = getConfig('SHORTENER_API')
+    if len(SHORTENER) == 0 or len(SHORTENER_API) == 0:
+        raise KeyError
+except KeyError:
+    SHORTENER = None
+    SHORTENER_API = None
 
 updater = tg.Updater(token=BOT_TOKEN,use_context=True)
 bot = updater.bot
