@@ -1,19 +1,19 @@
 {
-  "name": "bot4mirror",
+  "name": "WinTenCermin",
   "description": "This is a Telegram bot for mirroring files on the internet to Google Drive.",
   "logo": "https://telegra.ph/file/3927687333b6d5b407725.jpg",
   "keywords": [
     "telegram",
-    "bot4mirror",
+    "WinTenCermin",
     "mirror",
     "python",
     "aria",
     "mirror",
     "googledrive"
   ],
-  "repository": "https://github.com/zoeyzsz/bot4mirror",
-  "success_url": "https://github.com/zoeyzsz/bot4mirror",
-  "website": "https://github.com/zoeyzsz/bot4mirror",
+  "repository": "https://github.com/zoeyzsz/WinTenCermin",
+  "success_url": "https://github.com/zoeyzsz/WinTenCermin",
+  "website": "https://github.com/zoeyzsz/WinTenCermin",
   "env": {
     "ENV": {
       "description": "Setting to ANYTHING will enable webhooks when in ENV mode. Don't Change !",
@@ -32,7 +32,7 @@
       "required": true
     },
     "OWNER_IDS": {
-      "description": " (Sudo) Multiple Telegram user ID (not username) separate by space.",
+      "description": "Should be an integer. ID of owner of bot",
       "required": true
     },
     "DOWNLOAD_DIR": {
@@ -67,6 +67,10 @@
       "description": "This is to Authenticate to your Telegram account for downloading Telegram Files. You can get this from https://my.telegram.org",
       "required": true
     },
+    "TELEGRAPH_TOKEN": {
+      "description": "Telegraph Token : Get https://telegraph-token.hilmay619.repl.run",
+      "required": true
+    },
     "MEGA_API_KEY": {
       "description": "Your key Mega.Nz Account. Get here : https://mega.nz/sdk",
       "required": true
@@ -87,6 +91,24 @@
     "BLOCK_MEGA_FOLDER": {
       "description": "Set true/false if you don't like user mirror from mega.nz (type folder)",
       "value": "False",
+      "required": false
+    },
+    "STOP_DUPLICATE_MIRROR": {
+      "description": "Set true/false if you don't like user duplicate mirror",
+      "value": "False",
+      "required": false
+    },
+    "UPTOBOX_TOKEN": {
+      "description": "Your Uptobox Token, Get it from setting on uptobox settings",
+      "value": "False",
+      "required": false
+    },
+    "SHORTENER": {
+      "description": "Your shortener, if you want convert all link with shorterner",
+      "required": false
+    },
+    "SHORTENER_API": {
+      "description": "Your Shortener API",
       "required": false
     },
     "USER_SESSION_STRING": {
