@@ -8,12 +8,13 @@ RUN apt-get -qq update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-add-repository non-free && \
     apt-get -qq update && \
-    apt-get -qq install -y p7zip-full p7zip-rar tzdata aria2 curl nano pv jq ffmpeg locales python3 python3-pip python3-lxml libxml2-dev libxslt-dev python-dev gnupg gnupg1 gnupg2 apt-transport-https ca-certificates libcurl3-gnutls liberror-perl libxmuu1 && \
+    apt-get -qq install -y p7zip-full p7zip-rar aria2 curl pv jq ffmpeg locales python3-lxml && \
     apt-get purge -y software-properties-common
 
 COPY requirements.txt .
 COPY extract /usr/local/bin
-RUN chmod +x /usr/local/bin/extract
+COPY pextract /usr/local/bin
+RUN chmod +x /usr/local/bin/extract && chmod +x /usr/local/bin/pextract
 RUN pip3 install --no-cache-dir -r requirements.txt
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
