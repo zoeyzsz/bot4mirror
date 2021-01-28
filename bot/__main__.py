@@ -11,9 +11,9 @@ from bot import dispatcher, updater, botStartTime
 from bot.helper.ext_utils import fs_utils
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.message_utils import *
-from bot.helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
-from bot.helper.telegram_helper.filters import CustomFilters
-from bot.modules import authorize, list, cancel_mirror, mirror_status, mirror, clone, watch, delete
+from .helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
+from .helper.telegram_helper.filters import CustomFilters
+from .modules import authorize, list, cancel_mirror, mirror_status, mirror, clone, watch, delete
 
 
 @run_async
@@ -83,7 +83,7 @@ def bot_help(update, context):
 
 /{BotCommands.TarMirrorCommand} [download_url][magnet_link]: start mirroring and upload the archived (.tar) version of the download
 
-/{BotCommands.WatchCommand} [youtube-dl supported link]: Mirror through youtube-dl 
+/{BotCommands.WatchCommand} [youtube-dl supported link]: Mirror through youtube-dl. Click /{BotCommands.WatchCommand} for more help.
 
 /{BotCommands.TarWatchCommand} [youtube-dl supported link]: Mirror through youtube-dl and tar before uploading
 
