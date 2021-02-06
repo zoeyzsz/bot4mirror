@@ -32,7 +32,8 @@ def _watch(bot: Bot, update: Update, args: list, isTar=False):
     else:
         tag = None
 
-    listener = MirrorListener(bot, update, isTar, tag)
+    pswd = ""
+    listener = MirrorListener(bot, update, pswd, isTar, tag)
     ydl = YoutubeDLHelper(listener)
     threading.Thread(target=ydl.add_download,args=(link, f'{DOWNLOAD_DIR}{listener.uid}')).start()
     msg = f"User: {name} {username} (<code>{update.message.from_user.id}</code>)\n" \
