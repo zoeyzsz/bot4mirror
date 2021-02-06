@@ -209,9 +209,22 @@ def _mirror(bot, update, isTar=False, extract=False):
 
     message_args = update.message.text.split(' ')
     try:
-        link = message_args[1]
+           link = message_args[1]
+        if link.startswith("|") or link.startswith("pswd: "):
+            link = ''
     except IndexError:
         link = ''
+    try:
+        name = name_args[1]
+        name = name.strip()
+        if name.startswith("pswd: "):
+            name = ''
+    except IndexError:
+        name = ''
+    pswd = re.search('(?<=pswd: )(.*)', update.message.text)
+    if pswd is not None:
+      pswd = pswd.groups()
+      pswd = " ".join(pswd)
     LOGGER.info(link)
     link = link.strip()
     reply_to = update.message.reply_to_message
