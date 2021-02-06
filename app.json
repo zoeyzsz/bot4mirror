@@ -55,6 +55,10 @@
       "value": "False",
       "required": false
     },
+    "AUTHORIZED_CHATS": {
+      "description": "(Optional Field) Automatic Authorized Chat on Group, Example: -1001117929543",
+      "required": false
+    },
     "INDEX_URL": {
       "description": "(Optional Field) Refer to https://github.com/maple3142/GDIndex if you don't have you can skip this step.",
       "required": false
